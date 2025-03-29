@@ -5,7 +5,7 @@ import google.generativeai as genai
 app = Flask(__name__)
 CORS(app)
 
-# Set your Gemini API Key
+# Configure Gemini AI
 GEMINI_API_KEY = "AIzaSyCXj2QyaJvniYNSIPWHMxL1rZf0h-380Cw"
 genai.configure(api_key=GEMINI_API_KEY)
 
@@ -15,7 +15,6 @@ def chat():
         data = request.get_json()
         user_input = data.get("message", "")
 
-        # Use the correct model name (run list_models to check)
         model = genai.GenerativeModel("gemini-1.5-pro")  
         response = model.generate_content(user_input)
 
