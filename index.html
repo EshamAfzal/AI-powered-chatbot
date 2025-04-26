@@ -7,24 +7,27 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">Customer Support</div>
+    
+    <!-- Chatbot Toggle Button -->
+    <div class="chatbot-toggle" onclick="toggleChatbot()">
+        💬
+    </div>
+
+    <!-- Full Chatbot Window -->
+    <div class="chatbot-container" id="chatbot-container">
+        <div class="chat-header">
+            Customer Support
+            <span class="close-btn" onclick="toggleChatbot()">×</span>
+        </div>
         <div class="chat-box" id="chat-box">
-            <div class="bot-message">
-                <p>Hi! How can I assist you today?</p>
-            </div>
+            <div class="bot-message">Hello! How can I assist you today?</div>
         </div>
-        <div class="button-container">
-            <button class="chat-button" onclick="sendMessage('Order Status')">Order Status</button>
-            <button class="chat-button" onclick="sendMessage('Return or Refund')">Return or Refund</button>
-            <button class="chat-button" onclick="sendMessage('Cancel Order')">Cancel Order</button>
-            <button class="chat-button" onclick="sendMessage('Something Else')">Something Else</button>
-        </div>
-        <div class="chat-input-container">
+        <div class="chat-input">
             <input type="text" id="user-input" placeholder="Type your message...">
-            <button id="send-btn" onclick="sendMessage()">Send</button>
+            <button onclick="sendMessage()">Send</button>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>

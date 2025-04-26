@@ -1,28 +1,22 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import google.generativeai as genai
+from flask import Flask, render_template, request, jsonify
 
-app = Flask(__name__)
-CORS(app)
+app = Flask(__name__, static_folder='../', template_folder='../')
 
-# Configure Gemini AI
-GEMINI_API_KEY = "AIzaSyCXj2QyaJvniYNSIPWHMxL1rZf0h-380Cw"
-genai.configure(api_key=GEMINI_API_KEY)
+@app.route('/')
+def index():
+    return render_template('index.html')  # Serve index.html directly
 
-@app.route("/chat", methods=["POST"])
+@app.route('/chat', methods=['POST'])
 def chat():
-    try:
-        data = request.get_json()
-        user_input = data.get("message", "")
+    user_message = request.json.get('message')
 
-        model = genai.GenerativeModel("gemini-1.5-pro")  
-        response = model.generate_content(user_input)
+    # For now, using a simple logic to generate a reply
+    bot_reply = generate_reply(user_message)
 
-        return jsonify({"response": response.text})
-    
-    except Exception as e:
-        print("Error:", e)
-        return jsonify({"response": "Sorry, something went wrong."}), 500
+    return jsonify({'reply': bot_reply})
 
-if __name__ == "__main__":
-    app.run(debug=True)
+def generate_reply(message):
+    if "order" in message.lower():
+        return f"Your order has been received and is being processed!"
+    else:
+        return "How can I assist you with your order?"

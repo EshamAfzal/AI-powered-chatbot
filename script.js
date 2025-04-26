@@ -1,59 +1,39 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const chatBox = document.getElementById("chat-box");
+// Toggle chatbot open and close
+function toggleChatbot() {
+    const chatbotContainer = document.getElementById('chatbot-container');
+    if (chatbotContainer.style.display === "flex") {
+        chatbotContainer.style.display = "none";
+    } else {
+        chatbotContainer.style.display = "flex";
+    }
+}
+
+// Send a message
+function sendMessage() {
     const userInput = document.getElementById("user-input");
+    const chatBox = document.getElementById("chat-box");
+    const message = userInput.value.trim();
 
-    // Function to send messages
-    window.sendMessage = function (message) {
-        if (!message) message = userInput.value.trim();
-        if (message === "") return;
+    if (message !== "") {
+        // Add user message
+        const userMessage = document.createElement("div");
+        userMessage.className = "user-message";
+        userMessage.textContent = message;
+        chatBox.appendChild(userMessage);
 
-        // Display user message
-        displayMessage(message, "user-message");
+        // Scroll to the bottom
+        chatBox.scrollTop = chatBox.scrollHeight;
 
-        // Get chatbot response
-        setTimeout(() => {
-            getBotResponse(message);
-        }, 1000);
-
-        // Clear input field
+        // Clear input
         userInput.value = "";
-    };
 
-    // Function to display messages
-    function displayMessage(text, className) {
-        const messageDiv = document.createElement("div");
-        messageDiv.classList.add(className);
-        messageDiv.innerHTML = `<p>${text}</p>`;
-        chatBox.appendChild(messageDiv);
-        chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
+        // Simulate bot response
+        setTimeout(() => {
+            const botMessage = document.createElement("div");
+            botMessage.className = "bot-message";
+            botMessage.textContent = "Thank you for reaching out! We'll get back to you soon.";
+            chatBox.appendChild(botMessage);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }, 1000);
     }
-
-    // Function to get chatbot response
-    function getBotResponse(userMessage) {
-        let response = "";
-
-        switch (userMessage.toLowerCase()) {
-            case "order status":
-                response = "Please provide your order number to check the status.";
-                break;
-            case "return or refund":
-                response = `
-                    <b>Return & Refund Policy:</b><br>
-                    1️⃣ Order Number <br>
-                    2️⃣ Product Issue <br>
-                    3️⃣ Reason for Return/Refund
-                `;
-                break;
-            case "cancel order":
-                response = "To cancel your order, please provide the order number.";
-                break;
-            case "something else":
-                response = "Please describe your issue, and we’ll assist you further.";
-                break;
-            default:
-                response = "I'm sorry, I didn't understand that. Can you rephrase?";
-        }
-
-        displayMessage(response, "bot-message");
-    }
-});
+}
