@@ -65,8 +65,11 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-// 📌 NEW: Bubble Question Click Handler
+// Select Suggested Question
 function selectQuestion(text) {
-    document.getElementById("user-input").value = text;
-    sendMessage();
+    const userInput = document.getElementById('user-input');
+    userInput.value = text;
+    sendMessage(); // Auto send after selecting bubble
 }
+
+

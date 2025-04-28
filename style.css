@@ -91,14 +91,41 @@ body {
     align-self: flex-end;
 }
 
-/* Chat Input Area */
+/* Suggested Questions */
+.suggested-questions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+    margin-top: 15px;
+}
+
+.suggested-bubble {
+    background-color: #ACD3A8;
+    color: #3E3F5B;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.suggested-bubble:hover {
+    background-color: #8AB2A6;
+    color: white;
+}
+
+/* Input Area */
 .chat-input {
     display: flex;
-    padding: 10px;
+    align-items: center;
     gap: 10px;
+    padding: 10px;
     background-color: #F6F1DE;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
+    margin-top: auto;
+    position: relative;
 }
 
 /* Input Box */
@@ -109,6 +136,21 @@ body {
     border-radius: 20px;
     outline: none;
     font-size: 14px;
+    padding-right: 40px; /* Space for the attachment icon */
+}
+
+/* Attach Icon */
+.attachment-label {
+    position: absolute;
+    right: 75px; /* Position the attachment icon inside the input */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.attachment-icon {
+    font-size: 18px;
+    color: #3E3F5B;
 }
 
 /* Send Button */
@@ -116,37 +158,14 @@ body {
     background-color: #8AB2A6;
     border: none;
     color: white;
-    padding: 10px 15px;
+    padding: 10px;
     border-radius: 20px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.3s ease;
 }
 
-.chat-input button:hover {
-    background-color: #ACD3A8;
-}
-/* Bubble Questions */
-.bubble-questions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 10px;
-    background-color: #F6F1DE;
-    justify-content: center;
-    border-top: 1px solid #ddd;
-}
-
-.bubble-questions span {
-    background-color: #8AB2A6;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.bubble-questions span:hover {
-    background-color: #ACD3A8;
+/* Send Icon */
+.send-icon {
+    font-size: 22px;
+    color:white;
 }
