@@ -22,6 +22,14 @@
         <div class="chat-box" id="chat-box">
             <div class="bot-message">Hello! How can I assist you today?</div>
         </div>
+
+        <!-- 🔵 Bubble Questions Area (NEW) -->
+        <div class="bubble-questions" id="bubble-questions">
+            <span onclick="selectQuestion('Where is my order?')">Order Status</span>
+            <span onclick="selectQuestion('What is your return policy?')">Return Policy</span>
+            <span onclick="selectQuestion('How to contact support?')">Contact Support</span>
+        </div>
+
         <div class="chat-input">
             <input type="text" id="user-input" placeholder="Type your message...">
             <button onclick="sendMessage()">Send</button>
