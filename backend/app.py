@@ -1,45 +1,52 @@
-from flask import Flask, render_template, request, jsonify
-import google.generativeai as genai  # Make sure you have this import
+from flask import Flask, request, jsonify
+import sqlite3
+import re
 
-app = Flask(__name__, static_folder='../', template_folder='../')
+app = Flask(__name__)
 
-# Configure Gemini AI
-GEMINI_API_KEY = "AIzaSyCXj2QyaJvniYNSIPWHMxL1rZf0h-380Cw"  # (use a secret manager later for production)
-genai.configure(api_key=GEMINI_API_KEY)
-
-# Initialize the model
-model = genai.GenerativeModel("gemini-1.5-pro")
-
-@app.route('/')
-def index():
-    return render_template('index.html')  # Serve your HTML page
+# Helper function to fetch order details
+def fetch_order_details(order_id):
+    conn = sqlite3.connect('orders.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM orders WHERE order_id=?", (order_id,))
+    order = cursor.fetchone()
+    conn.close()
+    return order
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    try:
-        data = request.get_json()
-        if not data or "message" not in data:
-            return jsonify({"response": "Invalid input."}), 400
+    user_message = request.json.get('message', '').lower().strip()
 
-        user_input = data["message"]
+    # Friendly responses for greetings
+    greetings = ['hi', 'hello', 'hey', 'good morning', 'good evening', 'good afternoon']
 
-        # First, handle basic keyword matching
-        if "order" in user_input.lower():
-            bot_reply = "Your order has been received and is being processed!"
-        else:
-            # If no special keyword, ask Gemini AI
-            response = model.generate_content(user_input)
+    if any(greet in user_message for greet in greetings):
+        response = "👋 Hey there! How can I assist you today?"
 
-            if hasattr(response, "text"):
-                bot_reply = response.text
+    # Order tracking logic
+    elif 'order' in user_message or 'track' in user_message:
+        match = re.search(r'\b\d{3,}\b', user_message)  # search for 3+ digit numbers
+        if match:
+            order_id = match.group()
+            order = fetch_order_details(order_id)
+            if order:
+                order_id, email, details, price, phone, status = order
+                response = (f"📦 *Order ID*: {order_id}\n"
+                            f"✉️ *Email*: {email}\n"
+                            f"📝 *Details*: {details}\n"
+                            f"💵 *Price*: {price}\n"
+                            f"📱 *Phone*: {phone}\n"
+                            f"🚚 *Status*: {status}")
             else:
-                bot_reply = "No response from Gemini."
+                response = "❗Sorry, I couldn't find an order with that ID. Could you please double-check it?"
+        else:
+            response = "❓Could you please provide your Order ID so I can assist you with tracking?"
 
-        return jsonify({"response": bot_reply})
+    # If message not recognized
+    else:
+        response = "🤔 I'm here to help! Could you please provide more details about your query?"
 
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"response": "Sorry, something went wrong."}), 500
+    return jsonify({'reply': response})
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
