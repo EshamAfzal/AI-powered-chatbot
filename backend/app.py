@@ -1,52 +1,50 @@
+import google.generativeai as genai
 from flask import Flask, request, jsonify
-import sqlite3
-import re
+from flask_cors import CORS
+import logging
 
+# Initialize Flask app
 app = Flask(__name__)
+CORS(app)  # Enable CORS for frontend communication
 
-# Helper function to fetch order details
-def fetch_order_details(order_id):
-    conn = sqlite3.connect('orders.db')
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM orders WHERE order_id=?", (order_id,))
-    order = cursor.fetchone()
-    conn.close()
-    return order
+# Set your Gemini API Key
+GEN_API_KEY = "AIzaSyCXj2QyaJvniYNSIPWHMxL1rZf0h-380Cw"  # Your valid Gemini API key
+genai.configure(api_key=GEN_API_KEY)
 
-@app.route('/chat', methods=['POST'])
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+
+@app.route("/chat", methods=["POST"])
 def chat():
-    user_message = request.json.get('message', '').lower().strip()
+    try:
+        # Get user input from the request
+        data = request.get_json()
+        user_input = data.get("message", "")
+        
+        # Basic validation
+        if not user_input:
+            return jsonify({"response": "Please provide a valid message."}), 400
+        
+        # Use a simple test model
+        model_name = "gemini"  # Try using a simple model
 
-    # Friendly responses for greetings
-    greetings = ['hi', 'hello', 'hey', 'good morning', 'good evening', 'good afternoon']
-
-    if any(greet in user_message for greet in greetings):
-        response = "👋 Hey there! How can I assist you today?"
-
-    # Order tracking logic
-    elif 'order' in user_message or 'track' in user_message:
-        match = re.search(r'\b\d{3,}\b', user_message)  # search for 3+ digit numbers
-        if match:
-            order_id = match.group()
-            order = fetch_order_details(order_id)
-            if order:
-                order_id, email, details, price, phone, status = order
-                response = (f"📦 *Order ID*: {order_id}\n"
-                            f"✉️ *Email*: {email}\n"
-                            f"📝 *Details*: {details}\n"
-                            f"💵 *Price*: {price}\n"
-                            f"📱 *Phone*: {phone}\n"
-                            f"🚚 *Status*: {status}")
-            else:
-                response = "❗Sorry, I couldn't find an order with that ID. Could you please double-check it?"
+        # Test the model for a response
+        model = genai.GenerativeModel(model_name)
+        
+        # Check if the model can generate content
+        if hasattr(model, 'generate_content'):
+            response_gemini = model.generate_content(user_input)  # Use dynamic user input
+            gemini_response = response_gemini.text
+            logging.debug(f"Gemini response: {gemini_response}")  # Log Gemini response for debugging
         else:
-            response = "❓Could you please provide your Order ID so I can assist you with tracking?"
+            raise Exception(f"The model {model_name} does not support generate_content method.")
+        
+        # Return the response
+        return jsonify({"gemini_response": gemini_response})
 
-    # If message not recognized
-    else:
-        response = "🤔 I'm here to help! Could you please provide more details about your query?"
+    except Exception as e:
+        logging.error(f"Error: {str(e)}")  # Log the error in the backend
+        return jsonify({"response": f"Sorry, I encountered an error while processing your request: {str(e)}"}), 500
 
-    return jsonify({'reply': response})
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

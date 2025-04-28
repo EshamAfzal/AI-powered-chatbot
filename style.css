@@ -126,3 +126,27 @@ body {
 .chat-input button:hover {
     background-color: #ACD3A8;
 }
+/* Bubble Questions */
+.bubble-questions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+    background-color: #F6F1DE;
+    justify-content: center;
+    border-top: 1px solid #ddd;
+}
+
+.bubble-questions span {
+    background-color: #8AB2A6;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.bubble-questions span:hover {
+    background-color: #ACD3A8;
+}
