@@ -39,7 +39,6 @@
     <!-- Input Area -->
     <div class="chat-input">
         <!-- Attachment Icon (using Flaticon Link) -->
-        
         <input type="file" id="file-input" style="display: none;">
         
         <input type="text" id="user-input" placeholder="Type your message...">
@@ -55,5 +54,59 @@
   </div>
 
   <script src="script.js"></script>
+
+  <script>
+    // Function to handle user input
+    function sendMessage() {
+        const userInput = document.getElementById('user-input').value;
+        const chatBox = document.getElementById('chat-box');
+        
+        if (userInput) {
+            // Display user message
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('user-message');
+            userMessage.textContent = userInput;
+            chatBox.appendChild(userMessage);
+            
+            // Clear the input field
+            document.getElementById('user-input').value = '';
+
+            // Display typing animation from bot
+            showTypingIndicator();
+
+            // Simulate bot response after typing animation
+            setTimeout(() => {
+                const botMessage = document.createElement('div');
+                botMessage.classList.add('bot-message');
+                botMessage.textContent = 'Let me check that for you...'; // Replace with bot response logic
+                chatBox.appendChild(botMessage);
+                hideTypingIndicator();
+            }, 3000); // Simulate a 3-second delay before bot responds
+        }
+    }
+
+    // Function to show typing indicator
+    function showTypingIndicator() {
+        const chatBox = document.getElementById('chat-box');
+        const typingIndicator = document.createElement('div');
+        typingIndicator.classList.add('typing-indicator');
+        typingIndicator.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+        chatBox.appendChild(typingIndicator);
+    }
+
+    // Function to hide typing indicator
+    function hideTypingIndicator() {
+        const typingIndicator = document.querySelector('.typing-indicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    }
+
+    // Function to toggle chatbot window visibility
+    function toggleChatbot() {
+        const chatbotContainer = document.getElementById('chatbot-container');
+        chatbotContainer.style.display = chatbotContainer.style.display === 'none' ? 'flex' : 'none';
+    }
+  </script>
 </body>
 </html>
