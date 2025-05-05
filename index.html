@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Customer Support Chatbot</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Link to Flaticon Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
 </head>
 <body>
 
   <!-- Chatbot Toggle Button -->
-  <div class="chatbot-toggle" onclick="toggleChatbot()">
-    💬
-  </div>
+  <div class="chatbot-toggle" onclick="toggleChatbot()">💬</div>
 
-  <!-- Full Chatbot Window -->
+  <!-- Chatbot Window -->
   <div class="chatbot-container" id="chatbot-container">
     <div class="chat-header">
       Customer Support
@@ -26,8 +23,8 @@
       <div class="bot-message">Hello! How can I assist you today?</div>
     </div>
 
-    <!-- Suggested Questions Section -->
-    <div class="suggested-questions" id="suggested-questions">
+    <!-- Suggested Questions -->
+    <div class="suggested-questions">
       <div class="suggested-bubble" onclick="selectQuestion('Track my order')">Track Order</div>
       <div class="suggested-bubble" onclick="selectQuestion('Check my order status')">Order Status</div>
       <div class="suggested-bubble" onclick="selectQuestion('File a complaint')">Complain</div>
@@ -38,75 +35,17 @@
 
     <!-- Input Area -->
     <div class="chat-input">
-        <!-- Attachment Icon (using Flaticon Link) -->
-        <input type="file" id="file-input" style="display: none;">
-        
-        <input type="text" id="user-input" placeholder="Type your message...">
-        <label for="file-input" class="attachment-label">
-            <i class="fas fa-paperclip attachment-icon"></i>
-        </label>
-        <!-- Send Button (using Flaticon Link) -->
-        <button onclick="sendMessage()">
-            <i class="fas fa-paper-plane send-icon"></i>
-        </button>
+      <input type="file" id="file-input" style="display: none;" />
+      <input type="text" id="user-input" placeholder="Type your message..." />
+      <label for="file-input" class="attachment-label">
+        <i class="fas fa-paperclip attachment-icon"></i>
+      </label>
+      <button id="send-btn">
+        <i class="fas fa-paper-plane send-icon"></i>
+      </button>
     </div>
-    
   </div>
 
   <script src="script.js"></script>
-
-  <script>
-    // Function to handle user input
-    function sendMessage() {
-        const userInput = document.getElementById('user-input').value;
-        const chatBox = document.getElementById('chat-box');
-        
-        if (userInput) {
-            // Display user message
-            const userMessage = document.createElement('div');
-            userMessage.classList.add('user-message');
-            userMessage.textContent = userInput;
-            chatBox.appendChild(userMessage);
-            
-            // Clear the input field
-            document.getElementById('user-input').value = '';
-
-            // Display typing animation from bot
-            showTypingIndicator();
-
-            // Simulate bot response after typing animation
-            setTimeout(() => {
-                const botMessage = document.createElement('div');
-                botMessage.classList.add('bot-message');
-                botMessage.textContent = 'Let me check that for you...'; // Replace with bot response logic
-                chatBox.appendChild(botMessage);
-                hideTypingIndicator();
-            }, 3000); // Simulate a 3-second delay before bot responds
-        }
-    }
-
-    // Function to show typing indicator
-    function showTypingIndicator() {
-        const chatBox = document.getElementById('chat-box');
-        const typingIndicator = document.createElement('div');
-        typingIndicator.classList.add('typing-indicator');
-        typingIndicator.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-        chatBox.appendChild(typingIndicator);
-    }
-
-    // Function to hide typing indicator
-    function hideTypingIndicator() {
-        const typingIndicator = document.querySelector('.typing-indicator');
-        if (typingIndicator) {
-            typingIndicator.remove();
-        }
-    }
-
-    // Function to toggle chatbot window visibility
-    function toggleChatbot() {
-        const chatbotContainer = document.getElementById('chatbot-container');
-        chatbotContainer.style.display = chatbotContainer.style.display === 'none' ? 'flex' : 'none';
-    }
-  </script>
 </body>
 </html>
