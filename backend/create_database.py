@@ -1,32 +1,31 @@
 import sqlite3
 
-# Connect to SQLite database (it will create 'orders.db' if it doesn't exist)
 conn = sqlite3.connect('orders.db')
-cursor = conn.cursor()
+c = conn.cursor()
 
-# Create 'orders' table
-cursor.execute('''
+# Create orders table
+c.execute('''
 CREATE TABLE IF NOT EXISTS orders (
-    order_id INTEGER PRIMARY KEY,
-    email TEXT,
-    phone TEXT,
-    product TEXT,
+    order_id TEXT PRIMARY KEY,
+    item_name TEXT,
     price REAL,
+    date TEXT,
     status TEXT
 )
 ''')
 
-# Insert sample dummy orders
-orders = [
-    (12345, 'john@example.com', '123-456-7890', 'Wireless Headphones', 59.99, 'Shipped'),
-    (67890, 'alice@example.com', '987-654-3210', 'Bluetooth Speaker', 29.99, 'Delivered'),
-    (11223, 'bob@example.com', '555-123-4567', 'Smart Watch', 99.99, 'Processing')
-]
+# Insert dummy data
+c.execute("INSERT OR IGNORE INTO orders VALUES ('ORD123', 'Headphones', 50.0, '2025-05-01', 'Delivered')")
+c.execute("INSERT OR IGNORE INTO orders VALUES ('ORD124', 'Phone Case', 15.0, '2025-04-28', 'Shipped')")
 
-cursor.executemany('INSERT INTO orders VALUES (?, ?, ?, ?, ?, ?)', orders)
+# Create complaints table
+c.execute('''
+CREATE TABLE IF NOT EXISTS complaints (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT,
+    complaint TEXT
+)
+''')
 
-# Commit and close
 conn.commit()
 conn.close()
-
-print("Database created and dummy orders inserted successfully.")
